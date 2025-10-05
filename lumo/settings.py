@@ -31,8 +31,19 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['lumosoft.co.za', 'www.lumosoft.co.za', 'charismatic-dream.up.railway.app']
+CSRF_TRUSTED_ORIGINS = [
+    "https://charismatic-dream.up.railway.app",
+    "https://lumosoft-production.up.railway.app",
+    "https://www.lumosoft.co.za",
+    "https://lumosoft.co.za",
+]
 
+ALLOWED_HOSTS = [
+    "charismatic-dream.up.railway.app",
+    "lumosoft-production.up.railway.app",
+    "www.lumosoft.co.za",
+    "lumosoft.co.za",
+]
 
 # Application definition
 print("Loading INSTALLED_APPS...")
