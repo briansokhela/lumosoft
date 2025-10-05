@@ -1,16 +1,20 @@
-"""
-WSGI config for lumo project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/
-"""
-
 import os
-
 from django.core.wsgi import get_wsgi_application
+
+print("=== WSGI STARTUP ===")
+print("1. Setting Django settings module...")
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lumo.settings')
 
-application = get_wsgi_application()
+print("2. Settings module set, creating application...")
+
+try:
+    application = get_wsgi_application()
+    print("3. WSGI application created successfully!")
+    print("=== APPLICATION READY ===")
+except Exception as e:
+    print(f"ERROR creating WSGI application: {e}")
+    print(f"Error type: {type(e)}")
+    import traceback
+    traceback.print_exc()
+    raise

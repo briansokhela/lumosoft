@@ -29,13 +29,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
+print("Loading INSTALLED_APPS...")
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,9 +49,11 @@ INSTALLED_APPS = [
     'blog',
     'contacts',
 ]
-
+print(f"Loaded {len(INSTALLED_APPS)} apps")
+print("Loading middleware...")
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -59,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+print(f"Loaded {len(MIDDLEWARE)} middleware classes")
 
 ROOT_URLCONF = 'lumo.urls'
 
@@ -89,11 +92,24 @@ WSGI_APPLICATION = 'lumo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+print("Configuring database...")
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
+print("Database configured")
 
+# Debug database configuration
+print("=== DATABASE CONFIGURATION ===")
+print("DATABASE_URL exists:", 'DATABASE_URL' in os.environ)
+if 'DATABASE_URL' in os.environ:
+    db_url = os.environ['DATABASE_URL']
+    # Don't print the full URL for security, but show it exists
+    print("DATABASE_URL length:", len(db_url))
+    print("Database type:", 'postgres' if 'postgres' in db_url else 'other')
+else:
+    print("No DATABASE_URL found, using SQLite or other config")
+
+print("=== SETTINGS LOADING ===")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
