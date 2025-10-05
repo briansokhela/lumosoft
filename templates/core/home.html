@@ -17,7 +17,7 @@ Lumo Software Solutions
                     </div>
                 </div>
                 <div class="col-lg-6 hero-image">
-                    <img src="static/images/hero-image.png" alt="Software Development">
+                    <img src="static/images/hero-image.jpg" alt="Software Development">
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@ Lumo Software Solutions
             <div class="row">
                 <div class="col-lg-6 mb-4">
                     <p class="lead">Lumo Software Solutions is a premier technology company specializing in custom software development, web applications, and digital transformation services.</p>
-                    <p>Founded in 2015, we've helped over 200 businesses streamline their operations, enhance customer engagement, and achieve digital excellence through our innovative solutions.</p>
+                    <p>Founded in 2020, we've helped over 150 businesses streamline their operations, enhance customer engagement, and achieve digital excellence through our innovative solutions.</p>
                     <p>Our team of experienced developers, designers, and strategists work collaboratively to deliver solutions that not only meet but exceed our clients' expectations.</p>
                     <a href="{% url 'core:about' %}" class="btn btn-outline-primary mt-3">Learn More About Us</a>
                 </div>
@@ -132,24 +132,34 @@ Lumo Software Solutions
                 {% for project in featured_projects %}
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="portfolio-item">
-                        {% if project.image %}
-                            <img src="{{ project.image.url }}" alt="{{ project.title }}">
-                        {% else %}
-                            <img src="static/images/hero-image.png" alt="{{ project.title }}">
-                        {% endif %}
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-overlay-content">
-                                <h4 style="color: aliceblue;">{{ project.title }}</h4>
-                                <p>{{ project.description|truncatewords:10 }}</p>
-                                <span class="badge bg-light text-dark mb-2">{{ project.get_category_display }}</span>
-                                <a href="{% url 'portfolio:project_detail' project.slug %}" class="btn btn-secondary mt-2">View Details</a>
+                        <div class="portfolio-image">
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                            {% else %}
+                                <img src="#" alt="{{ project.title }}">
+                            {% endif %}
+                            <div class="portfolio-overlay">
+                                <div class="portfolio-overlay-content">
+                                    <h4 class="text-white">{{ project.title }}</h4>
+                                    <p class="mb-2">{{ project.description|truncatewords:10 }}</p>
+                                    <span class="badge bg-light text-dark mb-3">{{ project.get_category_display }}</span>
+                                    <div class="portfolio-links">
+                                        <a href="{% url 'portfolio:project_detail' project.slug %}" class="btn btn-sm btn-primary">View Details</a>
+                                        {% if project.website_url %}
+                                        <a href="{{ project.website_url }}" target="_blank" class="btn btn-sm btn-outline-light ms-1">Live Demo</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 {% empty %}
                 <div class="col-12 text-center">
-                    <p>No projects to display at the moment.</p>
+                    <div class="alert alert-info">
+                        <h4>No projects to display at the moment.</h4>
+                        <p class="mb-0">Please check back later or <a href="{% url 'contacts:contact' %}">contact us</a> to see examples of our work.</p>
+                    </div>
                 </div>
                 {% endfor %}
             </div>

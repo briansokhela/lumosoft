@@ -36,17 +36,20 @@ CSRF_TRUSTED_ORIGINS = [
     "https://lumosoft-production.up.railway.app",
     "https://www.lumosoft.co.za",
     "https://lumosoft.co.za",
+    "https://lumosoft.co.za",
 ]
 
 ALLOWED_HOSTS = [
     "charismatic-dream.up.railway.app",
+    "127.0.0.1",
+    "localhost",
     "lumosoft-production.up.railway.app",
+    "www.lumosoft-production.up.railway.app",
     "www.lumosoft.co.za",
     "lumosoft.co.za",
 ]
 
 # Application definition
-print("Loading INSTALLED_APPS...")
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -60,8 +63,7 @@ INSTALLED_APPS = [
     'blog',
     'contacts',
 ]
-print(f"Loaded {len(INSTALLED_APPS)} apps")
-print("Loading middleware...")
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', 
@@ -72,7 +74,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-print(f"Loaded {len(MIDDLEWARE)} middleware classes")
 
 ROOT_URLCONF = 'lumo.urls'
 
@@ -103,24 +104,11 @@ WSGI_APPLICATION = 'lumo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-print("Configuring database...")
+
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
-print("Database configured")
 
-# Debug database configuration
-print("=== DATABASE CONFIGURATION ===")
-print("DATABASE_URL exists:", 'DATABASE_URL' in os.environ)
-if 'DATABASE_URL' in os.environ:
-    db_url = os.environ['DATABASE_URL']
-    # Don't print the full URL for security, but show it exists
-    print("DATABASE_URL length:", len(db_url))
-    print("Database type:", 'postgres' if 'postgres' in db_url else 'other')
-else:
-    print("No DATABASE_URL found, using SQLite or other config")
-
-print("=== SETTINGS LOADING ===")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -163,16 +151,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SERVER_EMAIL = 'Lumo Software Solutions <sokhela.hld@gmail.com>'
+# Verified sender email for your app
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')   # must be verified in SendGrid
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') 
-DEFAULT_FROM_EMAIL = SERVER_EMAIL
-CONTACT_EMAIL = 'sokhela.hld@gmail.com' 
+# Business contact email (recipient of form submissions)
+CONTACT_EMAIL = os.getenv('EMAIL_HOST_USER')    # also verified in SendGrid if needed
+
+# SendGrid API key
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY') 
 
 
 

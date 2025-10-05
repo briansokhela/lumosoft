@@ -4,51 +4,50 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from datetime import datetime
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail  
 
 from .models import ContactSubmission
 from services.models import Service
 import threading
 
 def send_emails_async(submission, name, email):
-    """Send business + user emails in background"""
-    from django.core.mail import EmailMultiAlternatives
-    from django.template.loader import render_to_string
-    from django.conf import settings
-    from datetime import datetime
-
+    """Send business and user emails asynchronously using SendGrid API"""
     try:
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         # Business email
         subject_business = f'New Contact Form Submission from {name}'
         html_content_business = render_to_string(
             'contacts/email/business_notification.html',
             {'submission': submission}
         )
-        text_content_business = f"New contact from {name}\nEmail: {email}\nMessage:\n{submission.message}"
 
-        msg_business = EmailMultiAlternatives(
+        msg_business = Mail(
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to_emails=settings.CONTACT_EMAIL,
             subject=subject_business,
-            body=text_content_business,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[settings.CONTACT_EMAIL],
+            plain_text_content=f"New contact from {name}\nEmail: {email}\nMessage:\n{submission.message}",
+            html_content=html_content_business
         )
-        msg_business.attach_alternative(html_content_business, "text/html")
-        msg_business.send()
+        sg.send(msg_business)
+        print('sent business_notification')
 
-        # User email
+        # User confirmation email
         subject_user = 'Thank you for contacting Lumo Software Solutions'
-        context_user = {'name': name, 'year': datetime.now().year}
-        html_content_user = render_to_string('contacts/email/user_confirmation.html', context_user)
-        text_content_user = f"Hi {name},\n\nThank you for reaching out to Lumo Software Solutions."
-
-        msg_user = EmailMultiAlternatives(
-            subject=subject_user,
-            body=text_content_user,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[email],
+        html_content_user = render_to_string(
+            'contacts/email/user_confirmation.html',
+            {'name': name, 'year': datetime.now().year}
         )
-        msg_user.attach_alternative(html_content_user, "text/html")
-        msg_user.send()
 
+        msg_user = Mail(
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to_emails=email,
+            subject=subject_user,
+            plain_text_content=f"Hi {name},\n\nThank you for reaching out to Lumo Software Solutions.",
+            html_content=html_content_user
+        )
+        sg.send(msg_user)
+        print('sent user_confirmation')
     except Exception as e:
         print(f"[Email Error] {e}")
 

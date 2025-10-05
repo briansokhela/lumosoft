@@ -22,15 +22,15 @@
         <div class="row">
             {% for project in projects %}
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="portfolio-card h-100 d-flex flex-column position-relative">
+                <div class="portfolio-card">
                     <div class="portfolio-image">
                         {% if project.image %}
-                            <img src="{{ project.image.url }}" alt="{{ project.title }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}">
                         {% else %}
-                            <img src="{% static 'images/project-placeholder.jpg' %}" alt="{{ project.title }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                            <img src="{% static 'images/logo.png' %}" alt="{{ project.title }}">
                         {% endif %}
-                        <div class="portfolio-overlay d-flex align-items-center justify-content-center">
-                            <div class="portfolio-overlay-content text-center">
+                        <div class="portfolio-overlay">
+                            <div class="portfolio-overlay-content">
                                 <h5 class="text-white">{{ project.title }}</h5>
                                 <span class="badge bg-light text-dark mb-2">{{ project.get_category_display }}</span>
                                 <div class="portfolio-links mt-3">
@@ -42,10 +42,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="portfolio-info p-3 d-flex flex-column flex-grow-1">
+                    <div class="portfolio-info">
                         <h5 class="mb-2">{{ project.title }}</h5>
-                        <p class="small text-muted mb-2 flex-grow-1">{{ project.description|truncatewords:15 }}</p>
-                        <div class="project-meta mt-auto">
+                        <p class="small text-muted mb-2">{{ project.description|truncatewords:15 }}</p>
+                        <div class="project-meta">
                             {% if project.client %}
                             <div class="client mb-1">
                                 <small><strong>Client:</strong> {{ project.client }}</small>
