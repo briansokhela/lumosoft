@@ -1,0 +1,248 @@
+{% extends "base.html" %} 
+{% block title %}
+Lumo Software Solutions
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1>Transforming Ideas Into Digital Solutions</h1>
+                    <p>We build innovative software that drives business growth and enhances user experiences. Our team of experts delivers cutting-edge solutions tailored to your unique needs.</p>
+                    <div class="hero-buttons">
+                        <a href="{% url 'contacts:contact' %}" class="btn btn-primary me-3">Start a Project</a>
+                        <a href="{% url 'portfolio:project_list' %}" class="btn btn-outline-secondary">View Our Work</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 hero-image">
+                    <img src="static/images/hero-image.png" alt="Software Development">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Lumo</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <p class="lead">Lumo Software Solutions is a premier technology company specializing in custom software development, web applications, and digital transformation services.</p>
+                    <p>Founded in 2015, we've helped over 200 businesses streamline their operations, enhance customer engagement, and achieve digital excellence through our innovative solutions.</p>
+                    <p>Our team of experienced developers, designers, and strategists work collaboratively to deliver solutions that not only meet but exceed our clients' expectations.</p>
+                    <a href="{% url 'core:about' %}" class="btn btn-outline-primary mt-3">Learn More About Us</a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-check-circle text-primary fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Expert Team</h4>
+                                    <p>Our developers have 5+ years of experience in cutting-edge technologies.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-check-circle text-primary fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Quality Assurance</h4>
+                                    <p>Rigorous testing processes ensure bug-free, reliable software.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-check-circle text-primary fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Timely Delivery</h4>
+                                    <p>We deliver projects on time without compromising quality.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-check-circle text-primary fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Ongoing Support</h4>
+                                    <p>We provide continuous support and maintenance services.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section bg-light" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+            </div>
+            <div class="row">
+                {% for service in services %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            {% if service.icon_class %}
+                                <i class="{{ service.icon_class }}"></i>
+                            {% else %}
+                                <i class="fas fa-cog"></i>
+                            {% endif %}
+                        </div>
+                        <h3>{{ service.title }}</h3>
+                        <p>{{ service.short_description }}</p>
+                        <a href="{% url 'services:service_detail' service.slug %}" class="btn btn-sm btn-outline-primary mt-2">Learn More</a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p>No services available at the moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'services:service_list' %}" class="btn btn-primary">View All Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="section" id="portfolio">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Portfolio</h2>
+            </div>
+            <div class="row">
+                {% for project in featured_projects %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="portfolio-item">
+                        {% if project.image %}
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                        {% else %}
+                            <img src="static/images/hero-image.png" alt="{{ project.title }}">
+                        {% endif %}
+                        <div class="portfolio-overlay">
+                            <div class="portfolio-overlay-content">
+                                <h4 style="color: aliceblue;">{{ project.title }}</h4>
+                                <p>{{ project.description|truncatewords:10 }}</p>
+                                <span class="badge bg-light text-dark mb-2">{{ project.get_category_display }}</span>
+                                <a href="{% url 'portfolio:project_detail' project.slug %}" class="btn btn-secondary mt-2">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p>No projects to display at the moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'portfolio:project_list' %}" class="btn btn-primary">View Full Portfolio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="section bg-light" id="blog">
+        <div class="container">
+            <div class="section-title">
+                <h2>Latest From Our Blog</h2>
+            </div>
+            <div class="row">
+                {% for post in recent_posts %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        {% if post.featured_image %}
+                            <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <img src="static/images/hero-image.png" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.excerpt }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ post.created_at|date:"M d, Y" }}</small>
+                                <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-sm btn-outline-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p>No blog posts available at the moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-primary">View All Posts</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Get In Touch</h2>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="contact-form">
+                        <form method="post" action="{% url 'contacts:contact' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" name="company" placeholder="Company (Optional)">
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-control" name="service_of_interest">
+                                    <option value="">Select Service of Interest (Optional)</option>
+                                    {% for service in services %}
+                                    <option value="{{ service.id }}">{{ service.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" name="message" rows="5" placeholder="Your Message" required></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+    
+
+    

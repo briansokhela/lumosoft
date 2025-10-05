@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ service.title }} - Lumo Software Solutions{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1>{{ service.title }}</h1>
+                <p class="lead">{{ service.short_description }}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'contacts:contact' %}?service={{ service.id }}" class="btn btn-primary btn-lg">Get This Service</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Details Section -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="service-detail-content">
+                    <h2>Service Overview</h2>
+                    <p>{{ service.detailed_description }}</p>
+                    
+                    <h3 class="mt-5">What We Offer</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check text-success me-2"></i> Custom development</li>
+                                <li><i class="fas fa-check text-success me-2"></i> Quality assurance</li>
+                                <li><i class="fas fa-check text-success me-2"></i> Performance optimization</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check text-success me-2"></i> Ongoing maintenance</li>
+                                <li><i class="fas fa-check text-success me-2"></i> Technical support</li>
+                                <li><i class="fas fa-check text-success me-2"></i> Documentation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% if related_projects %}
+                    <h3 class="mt-5">Related Projects</h3>
+                    <div class="row">
+                        {% for project in related_projects %}
+                        <div class="col-lg-6 mb-4">
+                            <div class="related-project-card">
+                                {% if project.image %}
+                                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="project-thumb">
+                                {% else %}
+                                    <img src="{% static 'images/project-placeholder.jpg' %}" alt="{{ project.title }}" class="project-thumb">
+                                {% endif %}
+                                <div class="project-info">
+                                    <h5>{{ project.title }}</h5>
+                                    <p>{{ project.description|truncatewords:15 }}</p>
+                                    <a href="{% url 'portfolio:project_detail' project.slug %}" class="btn btn-sm btn-outline-primary">View Project</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="service-sidebar">
+                    <div class="sidebar-widget">
+                        <h4>Service Features</h4>
+                        <div class="feature-item">
+                            <i class="fas fa-rocket text-primary me-3"></i>
+                            <div>
+                                <h6>Fast Delivery</h6>
+                                <p class="small mb-0">Quick turnaround times</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt text-primary me-3"></i>
+                            <div>
+                                <h6>Secure & Reliable</h6>
+                                <p class="small mb-0">Enterprise-grade security</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-sync-alt text-primary me-3"></i>
+                            <div>
+                                <h6>Scalable</h6>
+                                <p class="small mb-0">Grows with your business</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-widget">
+                        <h4>Get Started</h4>
+                        <p>Ready to start your project? Contact us for a free consultation and quote.</p>
+                        <a href="{% url 'contacts:contact' %}?service={{ service.id }}" class="btn btn-primary w-100">Start Project</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Other Services Section -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="section-title">
+            <h2>Other Services</h2>
+        </div>
+        <div class="row">
+            {% for other_service in services %}
+            {% if other_service.id != service.id %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="service-card">
+                    <div class="service-icon">
+                        {% if other_service.icon_class %}
+                            <i class="{{ other_service.icon_class }}"></i>
+                        {% else %}
+                            <i class="fas fa-cog"></i>
+                        {% endif %}
+                    </div>
+                    <h5>{{ other_service.title }}</h5>
+                    <p class="small">{{ other_service.short_description|truncatewords:10 }}</p>
+                    <a href="{% url 'services:service_detail' other_service.slug %}" class="btn btn-sm btn-outline-primary">Learn More</a>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
