@@ -15,6 +15,8 @@ import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
+PORT = os.environ.get('PORT', 8888)
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
