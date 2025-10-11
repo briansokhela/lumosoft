@@ -15,7 +15,7 @@ import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
-PORT = os.environ.get('PORT', 8888)
+PORT = os.environ.get('PORT', 8080)
 
 load_dotenv()
 
